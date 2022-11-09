@@ -24,7 +24,7 @@ import pprint
 if __name__ == "__main__":
 
     pre_text = ["Open your books to page {}.".format(str(i)) for i in range(5) ]
-    post_text = [deepl.TranslationByDeepL(pre_text[i]) for i in range(5)]
+    post_text = [deepl.translate_by_deepl(pre_text[i]) for i in range(5)]
 
     pprint.pprint(pre_text)
     pprint.pprint(post_text)
