@@ -105,10 +105,29 @@ def translate_by_deepl(mytext):
     #結果出力
     return output
 
-if __name__ == "__main__":
+def divide_readable_text(filepath):
+    '''
+    ファイル（Readable）を英文と区切り文字のリストに分割
+        入力　テキストファイルのパス
+        出力　英文のリスト，区切り文字のリスト
+        
+    '''
+    with open(filepath, "r", encoding='utf-8') as f:
+        data = f.read().splitlines()
+        eng_data = [l for i, l in enumerate(data) if ((i%2) == 0)] # 偶数行（英文）のリスト
+        sep_data = [l for i, l in enumerate(data) if ((i%2) != 0)] # 奇数行（区切り文字"-----"）のリスト
 
-    pre_text = ["Open your books to page {}.".format(str(i)) for i in range(5) ]
-    post_text = [translate_by_deepl(pre_text[i]) for i in range(5)]
+    return eng_data, sep_data
 
-    pprint.pprint(pre_text)
-    pprint.pprint(post_text)
+
+# pre_text = ["Open your books to page {}.".format(str(i)) for i in range(5) ]
+# post_text = [deepl.translate_by_deepl(pre_text[i]) for i in range(5)]
+
+# pprint.pprint(pre_text)
+# pprint.pprint(post_text)
+
+# filepath = "/home/muesaka/projects/automation/readable_1-15.txt"
+# pre_text, sep_text = deepl.divide_readable_text(filepath)
+
+# print("[{}]".format(pre_text[3]))
+# print("[{}]".format(sep_text[3]))

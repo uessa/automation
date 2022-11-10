@@ -23,8 +23,24 @@ import pprint
 
 if __name__ == "__main__":
 
-    pre_text = ["Open your books to page {}.".format(str(i)) for i in range(5) ]
-    post_text = [deepl.translate_by_deepl(pre_text[i]) for i in range(5)]
+    filepath = "/home/muesaka/projects/automation/readable_16-24"
+    pre_filepath = filepath + ".txt"
+    post_filepath = filepath + "_translated.txt"
 
-    pprint.pprint(pre_text)
-    pprint.pprint(post_text)
+    pre_text, sep_text = deepl.divide_readable_text(pre_filepath) # ファイル（Readable）を英文と区切り文字のリストに分割
+    post_text = []
+
+    # deepLでpre_text[]を翻訳しpost_text[]に保存
+    for i in range(len(pre_text)):
+        # if i == 2:
+        #     break
+        
+        post_text.append(deepl.translate_by_deepl(pre_text[i])) # 翻訳した英文を保存
+        post_text.append(sep_text[i]) # 区切り文字を保存
+        print("{}/{} finished".format(i, len(pre_text)))
+
+    # 翻訳したテキスト（Readable）をファイルに保存
+    with open(post_filepath, 'w') as f:
+        for text in post_text:
+            f.write("{}\n".format(text)) # 改行して保存
+
