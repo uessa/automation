@@ -37,7 +37,7 @@ if __name__ == "__main__":
         
         post_text.append(deepl.translate_by_deepl(pre_text[i])) # 翻訳した英文を保存
         post_text.append(sep_text[i]) # 区切り文字を保存
-        print("{}/{} finished".format(i, len(pre_text)))
+        print("{}/{} finished".format(i+1, len(pre_text)))
 
     # 翻訳したテキスト（Readable）をファイルに保存
     with open(post_filepath, 'w') as f:
