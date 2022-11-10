@@ -23,7 +23,7 @@ import pprint
 
 if __name__ == "__main__":
 
-    filepath = "/home/muesaka/projects/automation/readable_16-24"
+    filepath = "/home/muesaka/projects/automation/readable_1-15"
     pre_filepath = filepath + ".txt"
     post_filepath = filepath + "_translated.txt"
 
@@ -32,12 +32,13 @@ if __name__ == "__main__":
 
     # deepLでpre_text[]を翻訳しpost_text[]に保存
     for i in range(len(pre_text)):
-        # if i == 2:
+        # if i == 5:
         #     break
         
         post_text.append(deepl.translate_by_deepl(pre_text[i])) # 翻訳した英文を保存
         post_text.append(sep_text[i]) # 区切り文字を保存
         print("{}/{} finished".format(i+1, len(pre_text)))
+        print("")
 
     # 翻訳したテキスト（Readable）をファイルに保存
     with open(post_filepath, 'w') as f:

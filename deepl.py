@@ -56,9 +56,10 @@ def translate_by_deepl(mytext):
     while not f_succsess:
         try: #DeepLに英文を送る
             en_text_area = driver.find_element(By.CSS_SELECTOR, input_selector) # 英語のテキストエリア
-            en_text_area.clear() # テキストエリアをクリア
+            # en_text_area.clear() # テキストエリアをクリア
             en_text_area.send_keys(mytext) # 翻訳する文字列
             # print(en_text_area.get_attribute("value")) # テキストエリアの値を確認
+            print(mytext)
             f_succsess = True
 
         except Exception  as identifier:              
@@ -76,10 +77,11 @@ def translate_by_deepl(mytext):
             try:# DeepLの出力を取得する
                 # output = driver.find_element(By.CSS_SELECTOR, output_selector).get_attribute("textContent") # 日本語のテキストエリア
                 output = driver.find_element(By.CSS_SELECTOR, output_selector).get_attribute("value") # 日本語のテキストエリア
+                
                 # print(output) # テキストエリアの値を確認
                 f_succsess = True
                 
-            except Exception  as identifier:               
+            except Exception as identifier:               
                 err_count=err_count+1
                 if err_count >=10:
                     raise identifier
@@ -91,12 +93,14 @@ def translate_by_deepl(mytext):
         取得したoutputが空文字でない場合、1つ前のoutputと同じ内容なら、翻訳終了ということで出力。
         '''        
         if output != "" : #出力が空文字でないとすれば結果の出力が始まった
+            time.sleep(10) # 翻訳がn%完了のダイアログ（DeepL）の待機
             if output_before == output:#出力が1つ前の出力と同じなら、出力が完了したってこと
                 break
             output_before = output            
         time.sleep(1)
 
     # 確認用
+    print(output)
     print("DeepL Translated")
 
     #chromeを閉じる
