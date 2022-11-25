@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-import chromedriver_binary
-import pprint
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 def translate_by_deepl(mytext):
@@ -19,7 +18,7 @@ def translate_by_deepl(mytext):
     # DeepLのページのURL
     load_url = "https://www.deepl.com/ja/translator"
 
-    # DeepLのページのSelector
+    # DeepLのページのSelector（テキストエリア）
     input_selector = ".lmt__textarea.lmt__source_textarea.lmt__textarea_base_style"
     output_selector = ".lmt__textarea.lmt__target_textarea.lmt__textarea_base_style"
     
@@ -27,21 +26,28 @@ def translate_by_deepl(mytext):
     WebDriverの処理がうまくいかなかったら1秒待機して再度WebDriverの処理を行う
     10回Tryしてダメだったらエラーを返して関数処理終
     '''
+    
+    # DeepLにアクセス
     err_count=0
     f_succsess=False
     while not f_succsess:
-        try: # DeepLにアクセス
+        try:
 
-            # Chromeのオプションを設定する
+            # Chromeのオプションを設定
             options = webdriver.ChromeOptions()
             options.add_argument('--headless')  
 
-            # DockerのSelenium Serverに接続する
-            driver = webdriver.Remote(
-                command_executor='http://localhost:4444/wd/hub',
-                desired_capabilities=options.to_capabilities(),
-                options=options,
-            )
+            # DockerのWebdriverを利用
+            # driver = webdriver.Remote(
+            #     command_executor='http://localhost:4444/wd/hub',
+            #     desired_capabilities=options.to_capabilities(),
+            #     options=options,
+            # )
+
+            # LocalのWebdriverを利用
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+            # URLに接続
             driver.get(load_url)
             f_succsess = True
 
@@ -50,7 +56,7 @@ def translate_by_deepl(mytext):
             if err_count >=10:
                 raise identifier
 
-    #DeepLに英文を送る
+    # DeepLに英文を送る
     err_count=0
     f_succsess=False
     while not f_succsess:
@@ -68,7 +74,7 @@ def translate_by_deepl(mytext):
                 raise identifier
             time.sleep(1)
 
-    #フラグ用
+    # フラグ用
     output_before = ""
     while 1:
         err_count=0
@@ -122,16 +128,3 @@ def divide_readable_text(filepath):
         sep_data = [l for i, l in enumerate(data) if ((i%2) != 0)] # 奇数行（区切り文字"-----"）のリスト
 
     return eng_data, sep_data
-
-
-# pre_text = ["Open your books to page {}.".format(str(i)) for i in range(5) ]
-# post_text = [deepl.translate_by_deepl(pre_text[i]) for i in range(5)]
-
-# pprint.pprint(pre_text)
-# pprint.pprint(post_text)
-
-# filepath = "/home/muesaka/projects/automation/readable_1-15.txt"
-# pre_text, sep_text = deepl.divide_readable_text(filepath)
-
-# print("[{}]".format(pre_text[3]))
-# print("[{}]".format(sep_text[3]))
